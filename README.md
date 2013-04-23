@@ -86,3 +86,36 @@ Open the file `views/home/index.html.erb` and copy the contents of the SPA `<bod
 To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global serach and replace to replace `<%` by `[%` and `%>` by `%]`.
 
     $ mv app/views/home/index.html.erb app/views/home/index.html
+
+To tell Backbone about this change, add the following to the file `app/assets/javascripts/home.js.coffee`:
+
+```javascript
+_.templateSettings = {
+    interpolate: /\[\[\=(.+?)\]\]/g,
+    evaluate: /\[\[(.+?)\]\]/g
+};
+```
+
+Rename the file `home.js.coffee` as `home.js`.
+
+    $ git mv app/assets/javascripts/home.js.coffee app/assets/javascripts/home.js
+
+At this point, you should see the same HTML for the Todos app, even though the CSS and other assets are not yet installed. Check in the new changes to git.
+
+    $ git status
+    $ git add .
+    $ git commit -m "Add HTML for Todos SPA code as Rails views."
+
+## 6. Add the CSS assets
+
+Copy the `base.css` and `bg.png` assets from the `todomvc` repo to the rails repo. The CSS file goes in `app/assets/stylesheets`. The image goes into `app/assets/stylesheets`. On my system I used these commands:
+
+    $ cp ../todomvc/assets/base.css app/assets/stylesheets
+    $ cp ../todomvc/assets/*.png app/assets/images
+
+Check the result by refreshing the page in the browser.
+
+That's the easy bit!
+
+    $ git add .
+    $ git commit -m "Add CSS and image assets"
