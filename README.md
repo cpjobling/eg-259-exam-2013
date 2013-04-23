@@ -52,3 +52,37 @@ Open a new window in your browser and navigate to <http://localhost:3000>. You s
 of the Erb template file `app/views/home.html.erb` rendered as the contents of the `views/layouts/application.html.erb` layout.
 
 We will be replacing this with our TodoMVC Backbone client shortly.
+
+Before proceeding, check your changes into version control.
+ 
+    $ git add .
+    $ git commit -m "Add Home controller and remove default index.html."
+
+## 5. Recreate the Backbone SPA as a Rails App.
+
+Combine the head from `backbone-todomvc/index.html` with that of `app/views/layouts/application.html.erb`. The result will be:
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Backbone.js • TodoMVC  • Rails</title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+
+  <%= yield %>
+
+  </body>
+</html>
+```
+
+Open the file `views/home/index.html.erb` and copy the contents of the SPA `<body>` element. Do not include the `<script src="..."></script>` but ensure that the Backbone templates `<script type="text/template ...></script>` are included. We will arrange for the Rails assets pipeline to load the JavaScript files later.
+
+To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global serach and replace to replace `<%` by `[%` and `%>` by `%]`.
+
+    $ mv app/views/home/index.html.erb app/views/home/index.html
