@@ -119,3 +119,24 @@ That's the easy bit!
 
     $ git add .
     $ git commit -m "Add CSS and image assets"
+
+## 7. Add the library JavaScript files.
+
+The Rails convention is to put JavaScript library files into `vendor/assets/javascripts`, so we'll do that here. The files we need to copy from `todomvc-backbone` are in the components folder. 
+
+    $ cp -r ../todomvc-backbone/components/* vendor/assets/javascripts
+
+Rails already has jquery installed, so we can remove that from the 'vendor/assets/javascript' folder
+
+    $ rm -rf vendor/assets/javascripts/jquery
+
+We then need to add the new libraries to the Rails JavaScript assets manifest that is stored in `app/assets/javascripts/application.js`. Edit that file so that the manifest looks like:
+
+```javascript
+//= require jquery
+//= require jquery_ujs
+//= require underscore/underscore
+//= require backbone/backbone
+//= require backbone.localStorage/backbone.localStorage
+//= require_tree .
+```
