@@ -333,3 +333,37 @@ Time to check into git!
 
     $ git add .
     $ git commit -am "Added todos resource and JSON api."
+
+## 11. The Final Step
+
+The final step is to wite up the Backbone front-end to the back end. As Backbone was originally extracted from a Rails app, this is actually simple as the Backbone controllers and Backbone model expect to talk to a JSON api just like as the one we have just set up. 
+
+Just comment out the line that uses local storage, in `app/assets/javascripts/collections/todos.js`
+and ensure that the url is set to `/api/todos` and that should be it!
+
+```javascript
+(function () {
+    'use strict';
+
+    // Todo Collection
+    // ---------------
+
+    // The collection of todos is backed by *localStorage* instead of a remote
+    // server.
+    var TodoList = Backbone.Collection.extend({
+        // Reference to this collection's model.
+        model: app.Todo,
+
+        // Save all of the todo items under the `"todos"` namespace.
+        //localStorage: new Backbone.LocalStorage('todos-backbone'),
+
+        url: '/api/todos',
+
+     // :
+
+    });
+
+    // Create our global collection of **Todos**.
+    app.Todos = new TodoList();
+})();
+```
