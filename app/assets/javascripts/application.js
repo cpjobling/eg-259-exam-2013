@@ -11,9 +11,14 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery_ujs
 //= require underscore/underscore
 //= require backbone/backbone
 //= require backbone.localStorage/backbone.localStorage
-//= require_tree .
+//= require models/todo
+//= require collections/todos
+//= require views/todos
+//= require views/app
+//= require routers/router
+//= require app.js
+//= require application.js
 

@@ -70,35 +70,24 @@ Combine the head from `backbone-todomvc/index.html` with that of `app/views/layo
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Backbone.js • TodoMVC  • Rails</title>
     <%= stylesheet_link_tag    "application", :media => "all" %>
-    <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
   <body>
 
   <%= yield %>
-
+  
+  <%= javascript_include_tag "application" %>
   </body>
 </html>
 ```
+(Note that JavaScript include has been moved to the end. It took me ages to find that bug!)
 
 Open the file `views/home/index.html.erb` and copy the contents of the SPA `<body>` element. Do not include the `<script src="..."></script>` but ensure that the Backbone templates `<script type="text/template ...></script>` are included. We will arrange for the Rails assets pipeline to load the JavaScript files later.
 
-To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global serach and replace to replace `<%` by `[%` and `%>` by `%]`.
+To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global search and replace to replace `<%` by `<%%`. This will ensure that the template
+tags meant for Backbone, will not be interpreted by rails.
 
     $ mv app/views/home/index.html.erb app/views/home/index.html
-
-To tell Backbone about this change, add the following to the file `app/assets/javascripts/home.js.coffee`:
-
-```javascript
-_.templateSettings = {
-    interpolate: /\[\[\=(.+?)\]\]/g,
-    evaluate: /\[\[(.+?)\]\]/g
-};
-```
-
-Rename the file `home.js.coffee` as `home.js`.
-
-    $ git mv app/assets/javascripts/home.js.coffee app/assets/javascripts/home.js
 
 At this point, you should see the same HTML for the Todos app, even though the CSS and other assets are not yet installed. Check in the new changes to git.
 
@@ -130,7 +119,7 @@ Rails already has jquery installed, so we can remove that from the 'vendor/asset
 
     $ rm -rf vendor/assets/javascripts/jquery
 
-We then need to add the new libraries to the Rails JavaScript assets manifest that is stored in `app/assets/javascripts/application.js`. Edit that file so that the manifest looks like:
+We then need to add the new libraries and the configuration file to the Rails JavaScript assets manifest that is stored in `app/assets/javascripts/application.js`. Edit that file so that the manifest looks like:
 
 ```javascript
 //= require jquery
@@ -140,3 +129,33 @@ We then need to add the new libraries to the Rails JavaScript assets manifest th
 //= require backbone.localStorage/backbone.localStorage
 //= require_tree .
 ```
+
+
+
+Once again, check this chnage into version control:
+
+    $ git add .
+    $ git commit -m "Add vendor/assets/javascripts needed for backbone"
+
+## 8. Add the application JavaScripts
+
+In the `todomvc-backbone` application, the actual application JavaScript files are stored in the `js` folder, arranged as `models`, `views`, `collections` and 'routers'. We can use the same structure inside rails.
+
+    $ cp -r ../todomvc-backbone/js/* app/assets/javascripts
+
+Add these new assets to the mainfest file:
+
+```javascript
+//= require jquery
+//= require jquery_ujs
+//= require underscore/underscore
+//= require backbone/backbone
+//= require backbone.localStorage/backbone.localStorage
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./views
+//= require_tree ./routers
+//= require app.js
+//= require application.js
+```
+
