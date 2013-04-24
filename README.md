@@ -367,3 +367,16 @@ and ensure that the url is set to `/api/todos` and that should be it!
     app.Todos = new TodoList();
 })();
 ```
+Browse to <http://localhost:3000> and your Rails-backed Todos app should just work!
+
+Magic!
+
+Final check in:
+
+    $ git add .
+    $ git commit -m 'Wire up Backbone UI to Rails JSON api on back end.'
+
+At this point you may wish to upload your version to GitHub for assessment. To do this create a
+new repository on GitHub and follow the instructions under **Quick Setup** for the Mac or Windows or use the manual instructions to **Push an existing repository from the command line**
+
+Simples!
