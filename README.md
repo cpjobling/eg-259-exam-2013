@@ -87,8 +87,6 @@ Open the file `views/home/index.html.erb` and copy the contents of the SPA `<bod
 To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global search and replace to replace `<%` by `<%%`. This will ensure that the template
 tags meant for Backbone, will not be interpreted by rails.
 
-    $ mv app/views/home/index.html.erb app/views/home/index.html
-
 At this point, you should see the same HTML for the Todos app, even though the CSS and other assets are not yet installed. Check in the new changes to git.
 
     $ git status
@@ -115,7 +113,7 @@ The Rails convention is to put JavaScript library files into `vendor/assets/java
 
     $ cp -r ../todomvc-backbone/components/* vendor/assets/javascripts
 
-Rails already has jquery installed, so we can remove that from the 'vendor/assets/javascript' folder
+Rails already has jQuery installed, so we can remove that from the 'vendor/assets/javascript' folder
 
     $ rm -rf vendor/assets/javascripts/jquery
 
@@ -132,7 +130,7 @@ We then need to add the new libraries and the configuration file to the Rails Ja
 
 
 
-Once again, check this chnage into version control:
+Once again, check this change into version control:
 
     $ git add .
     $ git commit -m "Add vendor/assets/javascripts needed for backbone"
@@ -147,14 +145,14 @@ Add these new assets to the mainfest file:
 
 ```javascript
 //= require jquery
-//= require jquery_ujs
 //= require underscore/underscore
 //= require backbone/backbone
 //= require backbone.localStorage/backbone.localStorage
-//= require_tree ./models
-//= require_tree ./collections
-//= require_tree ./views
-//= require_tree ./routers
+//= require models/todo
+//= require collections/todos
+//= require views/todos
+//= require views/app
+//= require routers/router
 //= require app.js
 //= require application.js
 ```
@@ -167,3 +165,6 @@ Commit your changes.
     $ git add .
     $ git commit -m "TodoMVC served by Rails!"
 
+## 10. The last step is to make rails serve the Todo list as a resource. 
+
+We'll tackle that in class.
