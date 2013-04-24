@@ -35,11 +35,15 @@ Go back to Rails Project
 
     $ cd ../todos_rails
 
-Use a generator to create a home controller with an index action
+Use a generator to create a home controller with an index action. 
 
-    $ rails generate controller Home index
+    $ rails generate controller home index --skip-javascripts
 
-Edit the file `config/routes.rb` to replace the line `get "home#index"` by `root :to => "home#index"`.
+*Note* that the option 
+`--skip-javascripts` prevents the
+rails generator creating JavaScript files in support of the new controller. We will be writing those ourself.
+
+Edit the file `config/routes.rb` to replace the line `get "home#index"` by `root to: "home#index"`.
 Delete the file `public/index.html`.
 
     $ git rm public/index.html
@@ -51,14 +55,14 @@ In a new window, open the rails server
 Open a new window in your browser and navigate to <http://localhost:3000>. You should see the contents 
 of the Erb template file `app/views/home.html.erb` rendered as the contents of the `views/layouts/application.html.erb` layout.
 
-We will be replacing this with our TodoMVC Backbone client shortly.
+We will be replacing this with HTML from our original TodoMVC Backbone client shortly.
 
 Before proceeding, check your changes into version control.
  
     $ git add .
     $ git commit -m "Add Home controller and remove default index.html."
 
-## 5. Recreate the Backbone SPA as a Rails App.
+## 5. Recreate the HTML for the Backbone SPA in Rails.
 
 Combine the head from `backbone-todomvc/index.html` with that of `app/views/layouts/application.html.erb`. The result will be:
 
@@ -80,12 +84,13 @@ Combine the head from `backbone-todomvc/index.html` with that of `app/views/layo
   </body>
 </html>
 ```
-(Note that JavaScript include has been moved to the end. It took me ages to find that bug!)
+(Note that `javascript_include_tag` has been moved to the end. It took me ages to find a bug
+that resulted from loading the JavaScript before the backbone templates in the HTML were loaded!)
 
-Open the file `views/home/index.html.erb` and copy the contents of the SPA `<body>` element. Do not include the `<script src="..."></script>` but ensure that the Backbone templates `<script type="text/template ...></script>` are included. We will arrange for the Rails assets pipeline to load the JavaScript files later.
+Open the file `views/home/index.html.erb` and copy the contents of the SPA `<body>` element. Do not include the `<script src="..."></script>` but ensure that the Backbone templates `<script type="text/template ...></script>` *are* included. We will arrange for the Rails assets pipeline to load the JavaScript files later.
 
 To avoid a clash between underscore templates and rails Erb templates, both of which use `<% %>` tags, we should do a global search and replace to replace `<%` by `<%%`. This will ensure that the template
-tags meant for Backbone, will not be interpreted by rails.
+tags meant for Backbone, will not be interpreted by rails, but passed on the browser as `<%`.
 
 At this point, you should see the same HTML for the Todos app, even though the CSS and other assets are not yet installed. Check in the new changes to git.
 
@@ -95,7 +100,7 @@ At this point, you should see the same HTML for the Todos app, even though the C
 
 ## 6. Add the CSS assets
 
-Copy the `base.css` and `bg.png` assets from the `todomvc` repo to the rails repo. The CSS file goes in `app/assets/stylesheets`. The image goes into `app/assets/stylesheets`. On my system I used these commands:
+Copy the `base.css` and `bg.png` assets from the `todomvc` repo to the rails repo. The CSS file goes in `app/assets/stylesheets`. The image goes into `app/assets/images`. On my system I used these commands:
 
     $ cp ../todomvc/assets/base.css app/assets/stylesheets
     $ cp ../todomvc/assets/*.png app/assets/images
@@ -137,7 +142,7 @@ Once again, check this change into version control:
 
 ## 8. Add the application JavaScripts
 
-In the `todomvc-backbone` application, the actual application JavaScript files are stored in the `js` folder, arranged as `models`, `views`, `collections` and 'routers'. We can use the same structure inside rails.
+In the `todomvc-backbone` application, the actual application JavaScript files are stored in the `js` folder, arranged as `models`, `views`, `collections` and `routers`. We can use the same structure inside rails.
 
     $ cp -r ../todomvc-backbone/js/* app/assets/javascripts
 
@@ -167,4 +172,4 @@ Commit your changes.
 
 ## 10. The last step is to make rails serve the Todo list as a resource. 
 
-We'll tackle that in class.
+We'll tackle that in class, and I'll write it up later.
