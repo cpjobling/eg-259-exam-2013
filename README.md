@@ -159,3 +159,11 @@ Add these new assets to the mainfest file:
 //= require application.js
 ```
 
+At this point, the Rails server is serving the TodoMVC app like a web server would!
+
+Commit your changes.
+
+    $ git status
+    $ git add .
+    $ git commit -m "TodoMVC served by Rails!"
+
